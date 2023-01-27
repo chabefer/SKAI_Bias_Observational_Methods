@@ -1,0 +1,9 @@
+
+
+This is a [SKAI](https://chabefer.github.io/SKY/index.html) website examining the bias of [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html).
+
+This website contains:
+
+* [A description of the methods used to estimate the bias of Observational Methods](Methods.html)
+* [A description of the datasets used to estimate the bias of Observational Methods](Data.html)
+* [A description of the results obtained](Results.html)

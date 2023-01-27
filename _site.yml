@@ -1,0 +1,20 @@
+name: "SKAI"
+output_dir: "."
+navbar:
+  title: "Bias of Observational Methods of Causal Inference"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Methods"
+      href: Methods.html
+    - text: "Data"
+      href: Data.html
+    - text: "Results"
+      href: Results.html
+    - text: "About"
+      href: About.html
+      
+      
+output:
+  html_document:
+    theme: flatly
