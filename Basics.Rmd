@@ -1,0 +1,56 @@
+---
+title: "LaLonde tests"
+output: html_document
+---
+
+The most basic method used to estimate the bias of [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) is the [LaLonde test](https://chabefer.github.io/STCI/LaLonde.html).
+[LaLonde tests](https://chabefer.github.io/STCI/LaLonde.html) consist in comparing the causal effect estimated using an Observational Method to the causal effect estimated using a Randomized Controlled Trial. 
+Formally, if we call $\hat{\theta}_E$ an experimental estimate of a causal parameter $\theta$, and $\hat{\theta}_{NE}$ the non-experimental (or observational) estimate of $\theta$, we can build an estimate of the bias of the observational method as follows:
+
+\begin{align*}
+  \hat{B}_{NE} & = \hat{\theta}_{NE}-\hat{\theta}_E.
+\end{align*}
+
+If $\hat{\theta}_E$ is a consistent and unbiased estimator of $\theta$, and $\hat{\theta}_{NE}$ is a consistent and unbiased estimator of $\theta_{NE}$, the population value of the observational estimator, then $\hat{B}_{NE}$ is a consistent and unbiased estimator of $B_{NE}$, where $B_{NE}=\theta_{NE}-\theta_E$.
+
+The idea of LaLonde tests was first proposed by [LaLonde (1986)](https://www.jstor.org/stable/1806062) in the context of the evaluation of Job Training Programs.
+LaLonde used the randomized experiment of the National Supported Work demonstration as an experimental benchmark and compared the experimental estimate to a set of observational estimates built using data on non-participants extracted from several administrative datasets. 
+The technique was later re-used and perfected by [Heckman, Ichimura, Smith and Todd (1998)](https://www.jstor.org/stable/2999630) using data from the evaluation of the Job Training Partnership Act, which contained both an experimental arm, but also collected data on the outcomes and characteristics of non participants. 
+LaLonde tests have been extensively repeated since then, and we start having [meta-analysis](https://www.jstor.org/stable/3658561) and [systematic reviews](https://www.tandfonline.com/doi/abs/10.1080/19345747.2016.1164781?journalCode=uree20) and even [systematic reviews of systematic reviews](https://pubmed.ncbi.nlm.nih.gov/32193818/) of LaLonde tests.
+
+# Issues with LaLonde tests
+
+The applications in both [LaLonde (1986)](https://www.jstor.org/stable/1806062) and [Heckman, Ichimura, Smith and Todd (1998)](https://www.jstor.org/stable/2999630) suffered from several limitations though: they were small-scale, not standardised, and not hands-off.
+Both [LaLonde (1986)](https://www.jstor.org/stable/1806062) and [Heckman, Ichimura, Smith and Todd (1998)](https://www.jstor.org/stable/2999630) are small scale: they only use data from one RCT, creating two limitations. 
+First, the external validity of the project is limited as we only learn about the bias in the context of two job-training programs in the US. 
+Second, the work cannot recover the distribution of bias across contexts meaning that while LaLonde is critical of observational methods, it is possible that observational methods perform better elsewhere, or that they are on average unbiased. 
+
+LaLonde and most following work use an additional non-standardised, non-experimental comparison group to assess observational methods. 
+This is because they use Randomized Controlled Trials with a [Self-Selection Design](https://chabefer.github.io/STCI/RCT.html#sec:design2), which does not require data collection on non-participants. 
+This introduces two other potential biases: the new sample may not be perfectly comparable to the experimental sample, and the survey instruments or variable definitions may not match perfectly. 
+
+Observational methods require many choices to be made by the researcher and these degrees of freedom can generate conflicting results even within one dataset. 
+There has been a 20-year debate over LaLonde's results, in part because the LaLonde approach used so far is not hands-off. 
+[Dehejia and](https://doi.org/10.2307/2669919) [Wahba (1999, 2002)](https://doi.org/10.1162/003465302317331982) re-analyse the LaLonde data with different methods and find that observational estimates are closer to experimental ones. 
+However, [Smith and Todd (2005)](https://doi.org/10.1016/j.jeconom.2004.04.011) find that Dehejia and Wahba's results are sensitive to technical details such as the trimming method used. 
+
+# Previous intents at addressing the issues with LaLonde tests
+
+Previous studies have addressed some of these issues. 
+Attempts at solving the small-scale problem typically perform meta-analysis of prior studies of observational bias, for example, [Glazerman et al. (2003)](https://doi.org/10.1177/0002716203254879) for job training, [Wong et al. (2017)](https://doi.org/10.1080/19345747.2016.1164781) for education, [Forbes and Dahabreh (2020)](https://doi.org/10.1007/s11606-020-05713-5) in medicine and [Chaplin et al. (2018)](https://doi.org/10.1002/pam.22051) for the [regression discontinuity design (RDD)](https://chabefer.github.io/STCI/NE.html#regression-discontinuity-designs). 
+However, meta-analysis is constrained by the methodological choices of the original study authors. 
+For example, some studies in [Chaplin et al. (2018)](https://doi.org/10.1002/pam.22051) use parametric RDD and some non-parametric, complicating the comparison. 
+In single context studies of bias, these choices might have been tailored and so overstate the performance of observational methods.
+
+Others have noted the standardisation problem, and focused on imperfect compliance RCTs as a way to solve this issue, e.g., [Arceneaux et al. (2006)](https://doi.org/10.1093/pan/mpj001) who assess matching methods in the context of a voter mobilisation experiment, and [Gill et al. (2016)](https://doi.org/10.1080/2330443X.2015.1084252) who focus on the intention-to-treat estimate and assess observational methods in the context of charter-school lotteries, but still suffer from the small-scale problem. 
+More recently, [Franklin et al (2020)](https://doi.org/10.1161/CIRCULATIONAHA.120.051718) try to reproduce the results of RCTs in medicine by using large databases on patient-level from US commercial and Medicare payers. 
+It is still unclear whether their outcome measurements are consistent between RCTs and observational methods.
+
+Others have started using machine learning approaches to ensure that analyses are hands-off. 
+[Duflo (2018)](https://www.nber.org/lecture/summer-institute-2018-meet-randomistas-useful-ml-tools-empirical-researchers) looks at the performance of double machine learning estimators in the context of scholarships in Ghana, and calls for more LaLonde style research with this type of tool. 
+
+Finally, others have started using large scale datasets on repeated Randomized Controlled Trials with Imperfect compliance, but have failed to adopt a fully hands-on approach, or to use modern machine learning methods.
+[Gordon et al. (2019)](https://doi.org/10.1287/mksc.2018.1135) evaluate two observational methods in 15 Facebook advertising experiments. 
+[Pritchett and Sandefur (2015)](https://doi.org/10.1257/aer.p20151016) compare experimental and non-experimental estimates of the effects of micro-credit on consumption and profits, using six studies. 
+The estimates differ although the direction does not seem to be systematic. 
+They also compare the magnitude of these biases to those incurred by extrapolating estimates across contexts, and find they tend to be smaller

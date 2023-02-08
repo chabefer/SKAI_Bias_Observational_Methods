@@ -11,7 +11,7 @@
 
 
 
-<title>Estimating the bias of Observational Methods</title>
+<title>Our approach</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -241,12 +241,15 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Bias of Observational Methods of Causal Inference</a>
+      <a class="navbar-brand" href="index.html">Estimating the bias of Observational Methods using Randomized Controlled Trials with Imperfect Compliance</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
   <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="Basics.html">Basics</a>
 </li>
 <li>
   <a href="Methods.html">Methods</a>
@@ -272,12 +275,101 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Estimating the bias of Observational Methods</h1>
+<h1 class="title toc-ignore">Our approach</h1>
 
 </div>
 
 
-
+<p>Our approach combines a large database of Randomized Controlled Trials with Imperfect Compliance with hands-off estimation methods to measure the bias of observational methods. We thus always apply observational and experimental methods within the same dataset. This avoids the problems and cost of searching for additional data in every context and ensures that our biases estimates do not reflect differences in survey design. We also tie our hands to the greatest extent possible by standardising our modelling and estimation choices across all datasets and automating the estimation methods.</p>
+<div id="identification" class="section level1">
+<h1>Identification</h1>
+<p>An imperfect compliance RCT (ICRCT) is one in which some “treated” individuals choose not to take up the offered program, and/or some “control” individuals choose to take it up. Among ICRCTs, we can distinguish <a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement Designs</a>, where “control” individuals are allowed to take up the treatment, and <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility Designs</a>, where “control” individuals are not allowed to take up the treatment. Each ICRCT can yield both an experimental and an observational estimate of program impact in the same setting, and hence allow estimation of the extent of selection bias. For example in an RCT in which only the treatment group is eligible for a program, we compare compliers and non-compliers in the treatment group to form an observational estimate, which can be compared to the experimental LATE.</p>
+<p>More formally, we assume access to observations on <span class="math inline">\(N\)</span> individuals <span class="math inline">\(i=1,\dots,N\)</span>. Each individual <span class="math inline">\(i\)</span> receives a randomised offer to take up a programme and can choose whether to take it up or not. We call the randomised offer the <strong>manipulation variable</strong> <span class="math inline">\(R_i\)</span> where <span class="math inline">\(R_i = 1\)</span> if the individual is randomised into the treatment group. Let us denote the actual <strong>programme participation</strong> by <span class="math inline">\(D_i\)</span> where <span class="math inline">\(D_i = 1\)</span> if the individual chooses to participate. If <span class="math inline">\(D_i\)</span> was equal to <span class="math inline">\(R_i\)</span> we would be in a situation of perfect compliance not suitable for our identification strategy. We will refer to the groups defined by <span class="math inline">\(R_i\)</span> as the treatment or manipulated group whereas we call the individuals defined by <span class="math inline">\(D_i\)</span> the participants. We also observed some covariates <span class="math inline">\(X_i\)</span>. In the potential outcomes framework, one typically assumes that an individual can have an outcome under the states of the world delineated by the values of both <span class="math inline">\(R_i\)</span> and <span class="math inline">\(D_i\)</span>: a potential outcome under manipulation <span class="math inline">\(r\)</span> and programme participation status <span class="math inline">\(d\)</span>, denoted by <span class="math inline">\(Y^{d,r}\)</span> for <span class="math inline">\((d,r)\in\{0,1\}^2\)</span>. As usual, observed outcomes are denoted <span class="math inline">\(Y_i\)</span> and are a function of the potential outcomes: <span class="math inline">\(Y_i=(1-D_i)(1-R_i)Y_i^{0,0}+D_i(1-R_i)Y_i^{1,0}+(1-D_i)R_iY_i^{0,1}+D_iR_iY_i^{1,1}\)</span>. We also define <span class="math inline">\(D_i^r\)</span>, <span class="math inline">\(r\in\{0,1\}\)</span>, the potential participation status of individual <span class="math inline">\(i\)</span> when assigned to manipulation <span class="math inline">\(r\)</span>.</p>
+<p>In an <a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement Design</a>, we can form two observational estimators, one in each treatment arm <span class="math inline">\(r\)</span>:</p>
+<p><span class="math display">\[\begin{align*}
+  NE^r = E[Y_{i}|D_{i}=1, R_{i}=r] -E[E[Y_{i}|X_i,D_{i}=0,R_{i}=r]|D_{i}=1,R_{i}=r].
+\end{align*}\]</span></p>
+<p>In our approach, we combine these two estimators into one, using an analog to a <a href="https://chabefer.github.io/STCI/RCT.html#using-the-wald-estimator">Wald estimator</a>:</p>
+<p><span class="math display">\[\begin{align*}
+  NE &amp; = \frac{NE^1\Pr(D_i=1|R_i=1)-NE^0\Pr(D_i=1|R_i=0)}{\Pr(D_i=1|R_i=1)-\Pr(D_i=1|R_i=0)} 
+\end{align*}\]</span></p>
+<p>In an <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility Design</a>, we can form only one of such estimators, <span class="math inline">\(NE^1\)</span>. <span class="math inline">\(NE^0\)</span> does not exist in that case since <span class="math inline">\(\Pr(D_i=1|R_i=0)=0\)</span> by definition in these designs. As a consequence, we have <span class="math inline">\(NE=NE^1\)</span> in the <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility Design</a>.</p>
+<p>In both designs, we can form an experimental estimator, in general using the <a href="https://chabefer.github.io/STCI/RCT.html#using-the-wald-estimator">Wald estimator</a>:</p>
+<p><span class="math display">\[\begin{align*}
+    E = \frac{E\left[Y_{i}|R_{i}=1\right]-E\left[Y_{i}|R_{i}=0\right]}{P(D_i=1|R_i=1)-P(D_i=1|R_i=0)}. 
+\end{align*}\]</span></p>
+<p>Our main methodological result is that, under standard assumptions (absence of interactions between units, <a href="https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect">exclusion restriction, independence, monotonicity, first stage</a> for the experimental estimator and <a href="https://chabefer.github.io/STCI/OM.html#identification-12">conditional independence and common support</a> for the observational estimator), the experimental and non-experimental estimator both estimate the same Local Average Treatment Effect (LATE):</p>
+<p><span class="math display">\[\begin{align*}
+  E &amp; =NE=E[Y_i^1-Y_i^0|D_i^1-D_i^0=1].
+\end{align*}\]</span></p>
+<p>We can thus use <span class="math inline">\(E\)</span> to estimate the bias of the observational estimator, by forming <a href="Basics.html"><span class="math inline">\(B_{NE}=NE-E\)</span></a>. It might seem frustrating not to be able to recover the bias of the observational method for the Treatment on the Treated parameter (<span class="math inline">\(TT=E[Y_i^1-Y_i^0|D_i=1]\)</span>), but the experimentally-induced variation in an <a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement Design</a> only reveals the causal effect for compliers, not for the all group of participants. In <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility Designs</a> though, we can recover <span class="math inline">\(TT\)</span> and its bias.</p>
+</div>
+<div id="estimation" class="section level1">
+<h1>Estimation</h1>
+<p>We are aiming at following a procedure that is as hands-off and normalised as possible.</p>
+<div id="determining-the-design" class="section level2">
+<h2>Determining the design</h2>
+<p>First, we use an automatic procedure to detect the design (<a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement</a> or <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility</a> or <a href="https://chabefer.github.io/STCI/RCT.html#sec:design1">Full Compliance</a>). <a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility designs</a> are defined so that there are never-takers but no always-takers. <a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement designs</a> are defined so that there are both never-takers and always-takers. <a href="https://chabefer.github.io/STCI/RCT.html#sec:design1">Full compliance designs</a> have no never-takers and no always-takers.</p>
+<p>Where <a href="https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect">never-takers</a> (for whom <span class="math inline">\(D_i^1=D_i^0=1\)</span>) or <a href="https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect">always-takers</a> (for whom <span class="math inline">\(D_i^1=D_i^0=0\)</span>) are present in the data but are few, the precision of the non-experimental estimator will be too low in the corresponding branch, and the analysis will be uninformative. In these cases, we decide to ignore these never-takers or always-takers, recoding their treatment variables. This leads us to accept a small amount of bias in the estimation of our parameter of interest, but we believe that this it is a better solution to discarding all datasets where this issue may happen.</p>
+<p>When should we consider that never-takers or always-takers are too few? The threshold of the share of never-takers/always-takers depends on the sample size. We use a <a href="https://chabefer.github.io/STCI/Power.html#minimum-detectable-effect">power calculation</a> to determine the threshold: if a relatively large <a href="https://chabefer.github.io/STCI/Power.html#minimum-detectable-effect">minimum detectable effect</a> (equal to 30% of a standard deviation) cannot be recovered using this dataset, we recode the never-takers/always-takers. We choose this value for the MDE, as it corresponds to a 90%/10% split between participants and non-participants in a treatment arm of 1000 individual observations. With our procedure, with a sample size of 1000, in treatment arms with more than 90% participants, all observations are considered to be participants. In control arms with less than 10% participants, all observations are considered to be non participants. The threshold increases with sample size, so as to reflect increasing precision on each arm.</p>
+</div>
+<div id="choice-of-control-variables" class="section level2">
+<h2>Choice of control variables</h2>
+<p>Our default approach is to include all of the control variables that are available in the underlying RCT dataset. The estimation of treatment effects uses several machine learning-based econometric methods. For all these methods, we build the same matrix of covariates. We build dummy variables for each dichotomous variable. For the rest of the covariates, we build polynomials and interactions.</p>
+</div>
+<div id="estimators" class="section level2">
+<h2>Estimators</h2>
+<p>We feed the covariates into several machine learning-based econometric methods in order to compute experimental and observational estimates of the treatment effects.</p>
+<div id="experimental-estimator-hate" class="section level3">
+<h3>Experimental estimator <span class="math inline">\(\hat{E}\)</span></h3>
+<p><a href="https://doi.org/10.1111/ectj.12097">Chernozhukov et al. (2018)</a> propose a set of estimators that rely on orthogonalization and sample splitting / cross-fitting to overcome regularization bias and overfitting. We estimate the <strong>Partially Linear Instrumental Variable Regression Model</strong>:</p>
+<p><span class="math display">\[\begin{align*}
+    Y_i -D_i*E= g_0(X_i) + U_i\\
+    R_i = m_0(X_i) + V_i, \\
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(U_i\)</span> and <span class="math inline">\(V_i\)</span> are error terms with <span class="math inline">\(E[U_i|R_i,X_i] = E[V_i|X_i]=0\)</span>, using the following series of steps:</p>
+<ol style="list-style-type: decimal">
+<li>Split the sample randomly into <span class="math inline">\(k\)</span> subsamples.</li>
+<li>Using <span class="math inline">\(k-1\)</span> subsamples, use a ranger learner to make the best predictions of <span class="math inline">\(Y\)</span> and D using <span class="math inline">\(X\)</span>: <span class="math inline">\(\hat g_0(X)\)</span> and <span class="math inline">\(\hat m_0(X)\)</span>.</li>
+<li>Using the remaining subsample, compute <span class="math inline">\(\tilde Y_i = Y_i - \hat g_0(X)\)</span> and <span class="math inline">\(\tilde D_i = D_i - \hat m_0(X)\)</span>.</li>
+<li>Using the remaining subsample, perform the partially linear regression of <span class="math inline">\(\tilde Y_i\)</span> on <span class="math inline">\(\tilde D_i\)</span> and <span class="math inline">\(\hat g_0(X)\)</span>: obtain <span class="math inline">\(\hat NE_1\)</span>.</li>
+<li>Repeat the last three steps using different splits of the <span class="math inline">\(k\)</span> susamples to obtain <span class="math inline">\(k\)</span> estimates of <span class="math inline">\(\hat \alpha_K\)</span>.</li>
+<li>Average the different estimators: get the DML estimator of <span class="math inline">\(\hat NE = \frac{1}{K} \sum_1^K NE_k\)</span>.</li>
+</ol>
+<p>The nuisance function is estimated using a random forest learner with a number of trees of 100. We use the DML2 algorithm recommended in <a href="https://doi.org/10.1111/ectj.12097">Chernozhukov et al. (2018)</a>.</p>
+</div>
+<div id="non-experimental-estimators-hatne" class="section level3">
+<h3>Non-experimental estimators <span class="math inline">\(\hat{NE}\)</span></h3>
+<p>We apply three different non-experimental estimators which all are based on machine-learning algorithms.</p>
+<div id="withwithout-comparison" class="section level4">
+<h4>With/Without Comparison</h4>
+<p>This is simply a naive comparison of the outcomes of those who took the treatment against those who did not take the treatment. We estimate it as follows:</p>
+<ul>
+<li>We run a regression of <span class="math inline">\(Y_i\)</span> on <span class="math inline">\(D_i\)</span> without including any of the covariates.</li>
+<li>The coefficient on <span class="math inline">\(D_i\)</span> is the estimated treatment effect</li>
+</ul>
+</div>
+<div id="post-double-selection-lasso" class="section level4">
+<h4>Post Double Selection Lasso</h4>
+<p>We follow <a href="https://doi.org/10.1093/restud/rdt044">Belloni et al. (2014)</a>:</p>
+<ol style="list-style-type: decimal">
+<li>Lasso regression of <span class="math inline">\(D_i\)</span> on <span class="math inline">\(X_i\)</span>.</li>
+<li>Lasso regression of <span class="math inline">\(Y_i\)</span> on <span class="math inline">\(X_i\)</span>.</li>
+<li>Run an OLS regresion of <span class="math inline">\(Y_i\)</span> on <span class="math inline">\(D_i\)</span>, controlling for the controls selected in both regressions.</li>
+</ol>
+</div>
+<div id="partially-linear-regression-model" class="section level4">
+<h4>Partially Linear Regression Model</h4>
+<p>We follow <a href="https://doi.org/10.1111/ectj.12097">Chernozhukov et al. (2018)</a> and <a href="https://www.jmlr.org/papers/v23/21-0862.html">Bach et al (2022)</a> by estimating the following model:</p>
+<p><span class="math display">\[\begin{align*}
+    Y_i = D_i*NE + g_0(X_i) + U_i\\
+    D_i = m_0(X_i) + V_i, \\
+\end{align*}\]</span></p>
+<p>where <span class="math inline">\(U_i\)</span> and <span class="math inline">\(V_i\)</span> are error terms with <span class="math inline">\(E[U_i|R_i,X_i] = E[V_i|X_i]=0\)</span>, using the same series of steps as for the Experimental estimator.</p>
+</div>
+</div>
+</div>
+</div>
 
 
 

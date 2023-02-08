@@ -1,9 +1,40 @@
 
 
-This is a [SKAI](https://chabefer.github.io/SKY/index.html) website examining the bias of [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html).
+This is a [SKAI](https://chabefer.github.io/SKY/index.html) website examining the bias of [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) using Randomized Controlled Trials with Imperfect Compliance.
 
 This website contains:
 
-* [A description of the methods used to estimate the bias of Observational Methods](Methods.html)
-* [A description of the datasets used to estimate the bias of Observational Methods](Data.html)
-* [A description of the results obtained](Results.html)
+* [The basics of estimating the bias of Observational Methods](Basics.html)
+* [How to estimate the bias of Observational Methods using Randomized Controlled Trials with Imperfect Compliance](Methods.html)
+* [A description of the datasets used](Data.html)
+* [Our estimates of the bias of Observational Methods](Results.html)
+
+The basic question we are asking is whether [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) offer biased estimates of causal effects, how large is this bias and how it is distributed.
+[Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) consist in inferring the effect of a treatment by comparing treated and untreated units that have similar observed characteristics.
+[Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) try to solve the bias due to confounding factors (*a.k.a.* [selection bias](https://chabefer.github.io/STCI/FPCI.html#selection-bias)) by accounting for the bias due to observed confounders.
+The hope is that the bias due to unobserved confounders is small enough to be negligible. 
+
+The main advantage of [Observational Methods](https://chabefer.github.io/STCI/OM.html) over the other methods of causal inference ([Randomized Controlled Trials](https://chabefer.github.io/STCI/RCT.html) and [Natural Experiments](https://chabefer.github.io/STCI/NE.html)) is their broad applicability: they can almost always be implemented to estimate a treatment effect.
+With Observational Methods, we can eschew the difficulties of implementing a Randomized Controlled Trial in the field.
+We also can apply Observational Methods even when no clear Natural Experiment has been identified in the data. 
+
+The key question is whether the ease-of-use of Observational Methods comes at a huge cost in terms of bias.
+This is this question that we examine here. 
+
+# Why do we care?
+
+Consider a policymaker deciding whether to expand a social program. 
+Suppose she has access to **observational** data that records outcomes for users and non-users, allowing her to form an observational estimate of the program's impact.
+Her immediate concern is **selection bias**: differences in outcomes might reflect differences in **who** chooses to take up the program rather than the causal effect of program participation.
+Because of these concerns, many advisors would argue that she should spend additional resources to conduct a Randomized Control Trial (RCT), gathering **experimental** data that allows unbiased estimation of the program's effects. 
+What should she do?
+
+The extent of selection bias in the observational study determines whether she should run the RCT.
+If she knew the bias was negligible, there would be no reason to do so.
+Similarly, if there were a known positive bias (i.e., a bias that favours program adoption), or a known negative bias, she could simply adjust her observational estimate.
+The harder case, and that which the advisors would highlight, is when the sign and magnitude of bias are uncertain.
+If she knew its distribution, she could adjust her confidence in the observational estimate, and make a decision on that basis.
+But without further information on the distribution of bias, she must simply take a guess at the best option.
+
+Our goal is to take the guesswork out of this decision.
+We treat selection bias as a parameter to be estimated, and the numerous imperfect compliance RCTs run in the last 20-30 years as a large untapped data source.

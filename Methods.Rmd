@@ -1,5 +1,147 @@
 ---
-title: "Estimating the bias of Observational Methods"
+title: "Our approach"
 output: html_document
 ---
 
+Our approach combines a large database of Randomized Controlled Trials with Imperfect Compliance with hands-off estimation methods to measure the bias of observational methods.
+We thus always apply observational and experimental methods within the same dataset. 
+This avoids the problems and cost of searching for additional data in every context and ensures that our biases estimates do  not reflect differences in survey design.
+We also tie our hands to the greatest extent possible by standardising our modelling and estimation choices across all datasets and automating the estimation methods.
+
+# Identification
+
+An imperfect compliance RCT (ICRCT) is one in which some "treated" individuals choose not to take up the offered program, and/or some "control" individuals choose to take it up. 
+Among ICRCTs, we can distinguish [Encouragement Designs](https://chabefer.github.io/STCI/RCT.html#sec:design4), where "control" individuals are allowed to take up the treatment, and [Eligibility Designs](https://chabefer.github.io/STCI/RCT.html#sec:design3), where "control" individuals are not allowed to take up the treatment.
+Each ICRCT can yield both an experimental and an observational estimate of program impact in the same setting, and hence allow estimation of the extent of selection bias. 
+For example in an RCT in which only the treatment group is eligible for a program, we compare compliers and non-compliers in the treatment group to form an observational estimate, which can be compared to the experimental LATE. 
+
+More formally, we assume access to observations on $N$ individuals $i=1,\dots,N$. 
+Each individual $i$ receives a randomised offer to take up a programme and can choose whether to take it up or not.
+We call the randomised offer the **manipulation variable** $R_i$  where $R_i = 1$ if the individual is randomised into the treatment group.
+Let us denote the actual **programme participation** by $D_i$ where $D_i = 1$ if the individual chooses to participate.
+If $D_i$ was equal to $R_i$ we would be in a situation of perfect compliance not suitable for our identification strategy.
+We will refer to the groups defined by $R_i$ as the treatment or manipulated group whereas we call the individuals defined by $D_i$ the participants.
+We also observed some covariates $X_i$.
+In the potential outcomes framework, one typically assumes that an individual can have an outcome under the states of the world delineated by the values of both $R_i$ and $D_i$: a potential outcome under manipulation $r$ and programme participation status $d$, denoted by $Y^{d,r}$ for $(d,r)\in\{0,1\}^2$.
+As usual, observed outcomes are denoted $Y_i$ and are a function of the potential outcomes: $Y_i=(1-D_i)(1-R_i)Y_i^{0,0}+D_i(1-R_i)Y_i^{1,0}+(1-D_i)R_iY_i^{0,1}+D_iR_iY_i^{1,1}$.
+We also define $D_i^r$, $r\in\{0,1\}$, the potential participation status of individual $i$ when assigned to manipulation $r$.
+
+In an [Encouragement Design](https://chabefer.github.io/STCI/RCT.html#sec:design4), we can form two observational estimators, one in each treatment arm $r$: 
+
+\begin{align*}
+  NE^r = E[Y_{i}|D_{i}=1, R_{i}=r] -E[E[Y_{i}|X_i,D_{i}=0,R_{i}=r]|D_{i}=1,R_{i}=r].
+\end{align*}
+
+In our approach, we combine these two estimators into one, using an analog to a [Wald estimator](https://chabefer.github.io/STCI/RCT.html#using-the-wald-estimator):
+
+\begin{align*}
+  NE & = \frac{NE^1\Pr(D_i=1|R_i=1)-NE^0\Pr(D_i=1|R_i=0)}{\Pr(D_i=1|R_i=1)-\Pr(D_i=1|R_i=0)} 
+\end{align*}
+
+In an [Eligibility Design](https://chabefer.github.io/STCI/RCT.html#sec:design3), we can form only one of such estimators, $NE^1$.
+$NE^0$ does not exist in that case since $\Pr(D_i=1|R_i=0)=0$ by definition in these designs.
+As a consequence, we have $NE=NE^1$ in the [Eligibility Design](https://chabefer.github.io/STCI/RCT.html#sec:design3).
+
+In both designs, we can form an experimental estimator, in general using the [Wald estimator](https://chabefer.github.io/STCI/RCT.html#using-the-wald-estimator):
+
+\begin{align*}
+    E = \frac{E\left[Y_{i}|R_{i}=1\right]-E\left[Y_{i}|R_{i}=0\right]}{P(D_i=1|R_i=1)-P(D_i=1|R_i=0)}. 
+\end{align*}
+
+Our main methodological result is that, under standard assumptions (absence of interactions between units, [exclusion restriction, independence, monotonicity, first stage](https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect) for the experimental estimator and [conditional independence and common support](https://chabefer.github.io/STCI/OM.html#identification-12) for the observational estimator), the experimental and non-experimental estimator both estimate the same Local Average Treatment Effect (LATE): 
+
+\begin{align*}
+  E & =NE=E[Y_i^1-Y_i^0|D_i^1-D_i^0=1].
+\end{align*}
+
+We can thus use $E$ to estimate the bias of the observational estimator, by forming [$B_{NE}=NE-E$](Basics.html).
+It might seem frustrating not to be able to recover the bias of the observational method for the Treatment on the Treated parameter ($TT=E[Y_i^1-Y_i^0|D_i=1]$), but the experimentally-induced variation in an [Encouragement Design](https://chabefer.github.io/STCI/RCT.html#sec:design4) only reveals the causal effect for compliers, not for the all group of participants.
+In [Eligibility Designs](https://chabefer.github.io/STCI/RCT.html#sec:design3) though, we can recover $TT$ and its bias.
+
+# Estimation
+
+We are aiming at following a procedure that is as hands-off and normalised as possible.
+
+## Determining the design
+
+First, we use an automatic procedure to detect the design ([Encouragement](https://chabefer.github.io/STCI/RCT.html#sec:design4) or [Eligibility](https://chabefer.github.io/STCI/RCT.html#sec:design3) or [Full Compliance](https://chabefer.github.io/STCI/RCT.html#sec:design1)).
+[Eligibility designs](https://chabefer.github.io/STCI/RCT.html#sec:design3) are defined so that there are never-takers but no always-takers.
+[Encouragement designs](https://chabefer.github.io/STCI/RCT.html#sec:design4) are defined so that there are both never-takers and always-takers.
+[Full compliance designs](https://chabefer.github.io/STCI/RCT.html#sec:design1) have no never-takers and no always-takers.
+
+Where [never-takers](https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect) (for whom $D_i^1=D_i^0=1$) or [always-takers](https://chabefer.github.io/STCI/RCT.html#identification-of-the-local-average-treatment-effect) (for whom $D_i^1=D_i^0=0$) are present in the data but are few, the precision of the non-experimental estimator will be too low in the corresponding branch, and the analysis will be uninformative. 
+In these cases, we decide to ignore these never-takers or always-takers, recoding their treatment variables. 
+This leads us to accept a small amount of bias in the estimation of our parameter of interest, but we believe that this it is a better solution to discarding all datasets where this issue may happen. 
+
+When should we consider that never-takers or always-takers are too few? 
+The threshold of the share of never-takers/always-takers depends on the sample size. 
+We use a [power calculation](https://chabefer.github.io/STCI/Power.html#minimum-detectable-effect) to determine the threshold: if a relatively large [minimum detectable effect](https://chabefer.github.io/STCI/Power.html#minimum-detectable-effect) (equal to 30\% of a standard deviation) cannot be recovered using this dataset, we recode the  never-takers/always-takers. 
+We choose this value for the MDE, as it corresponds to a 90\%/10\% split between participants and non-participants in a treatment arm of 1000 individual observations.
+With our procedure, with a sample size of 1000, in treatment arms with more than 90\% participants, all observations are considered to be participants.
+In control arms with less than 10\% participants, all observations are considered to be non participants.
+The threshold increases with sample size, so as to reflect increasing precision on each arm.
+
+## Choice of control variables
+
+Our default approach is to include all of the control variables that are available in the underlying RCT dataset.
+The estimation of treatment effects uses several machine learning-based econometric methods.
+For all these methods, we build the same matrix of covariates.
+We build dummy variables for each dichotomous variable.
+For the rest of the covariates, we build polynomials and interactions.
+
+## Estimators
+
+We feed the covariates into several machine learning-based econometric methods in order to compute experimental and observational estimates of the treatment effects. 
+
+### Experimental estimator $\hat{E}$
+
+[Chernozhukov et al. (2018)](https://doi.org/10.1111/ectj.12097) propose a set of estimators that rely on orthogonalization and sample splitting / cross-fitting to overcome regularization bias and overfitting.
+We estimate the **Partially Linear Instrumental Variable Regression Model**:
+  
+\begin{align*}
+    Y_i -D_i*E= g_0(X_i) + U_i\\
+    R_i = m_0(X_i) + V_i, \\
+\end{align*}
+
+where $U_i$ and $V_i$ are error terms with $E[U_i|R_i,X_i] = E[V_i|X_i]=0$, using the following series of steps:
+
+  1. Split the sample randomly into $k$ subsamples.
+  2. Using $k-1$ subsamples, use a ranger learner to make the best predictions of $Y$ and D using $X$: $\hat g_0(X)$ and $\hat m_0(X)$.
+  3. Using the remaining subsample, compute $\tilde Y_i = Y_i - \hat g_0(X)$ and $\tilde D_i = D_i - \hat m_0(X)$.
+  4. Using the remaining subsample, perform the partially linear regression of $\tilde Y_i$ on $\tilde D_i$ and $\hat g_0(X)$: obtain $\hat NE_1$.
+  5. Repeat the last three steps using different splits of the $k$ susamples to obtain $k$ estimates of $\hat \alpha_K$.
+  6. Average the different estimators: get the DML estimator of $\hat NE =  \frac{1}{K} \sum_1^K NE_k$.
+
+The nuisance function is estimated using a random forest learner with a number of trees of 100.
+We use the DML2 algorithm recommended in [Chernozhukov et al. (2018)](https://doi.org/10.1111/ectj.12097).
+
+### Non-experimental estimators $\hat{NE}$
+
+We apply three different non-experimental estimators which all are based on machine-learning algorithms.
+
+#### With/Without Comparison
+
+This is simply a naive comparison of the outcomes of those who took the treatment against those who did not take the treatment.
+We estimate it as follows:
+
+  * We run a regression of $Y_i$ on $D_i$ without including any of the covariates.
+  * The coefficient on $D_i$ is the estimated treatment effect
+
+#### Post Double Selection Lasso
+
+We follow [Belloni et al. (2014)](https://doi.org/10.1093/restud/rdt044):
+
+  1. Lasso regression of $D_i$ on $X_i$.
+  2. Lasso regression of $Y_i$ on $X_i$.
+  3. Run an OLS regresion of $Y_i$ on $D_i$, controlling for the controls selected in both regressions.
+
+#### Partially Linear Regression Model
+
+We follow [Chernozhukov et al. (2018)](https://doi.org/10.1111/ectj.12097) and [Bach et al (2022)](https://www.jmlr.org/papers/v23/21-0862.html) by estimating the following model:
+
+\begin{align*}
+    Y_i = D_i*NE + g_0(X_i) + U_i\\
+    D_i = m_0(X_i) + V_i, \\
+\end{align*}
+
+where $U_i$ and $V_i$ are error terms with $E[U_i|R_i,X_i] = E[V_i|X_i]=0$, using the same series of steps as for the Experimental estimator. 

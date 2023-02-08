@@ -1,10 +1,12 @@
 name: "SKAI"
 output_dir: "."
 navbar:
-  title: "Bias of Observational Methods of Causal Inference"
+  title: "Estimating the bias of Observational Methods using Randomized Controlled Trials with Imperfect Compliance"
   left:
     - text: "Home"
       href: index.html
+    - text: "Basics"
+      href: Basics.html
     - text: "Methods"
       href: Methods.html
     - text: "Data"
