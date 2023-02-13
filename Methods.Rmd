@@ -145,3 +145,15 @@ We follow [Chernozhukov et al. (2018)](https://doi.org/10.1111/ectj.12097) and [
 \end{align*}
 
 where $U_i$ and $V_i$ are error terms with $E[U_i|R_i,X_i] = E[V_i|X_i]=0$, using the same series of steps as for the Experimental estimator. 
+
+## Summarizing the results
+
+Our approach yields one estimate of the bias of observational methods $\hat{B}^{NE}_{o,m,s}$ by estimator $NE$ ($WW$, $P2SL$ or $PLR$), outcome $o$, manipulation $m$ (there might be several manipulations by experiment) and study $s$.
+We analyze our results using a [meta-analytic regression](https://chabefer.github.io/STCI/meta.html#meta-regression), and in particular the **Correlated Hierarchical model with Robust Variance Estimation** of [Pustejovsky and Tipton (2022)](https://doi.org/10.1007/s11121-021-01246-3).
+In practice, we model each bias estimate as follows:
+
+\begin{align}
+  \hat{B}^{NE}_{o,m,s} & = \mathbf{X}_{s} \mathbf{\beta}  + u_s + \nu_m + \omega_o +\epsilon_{o,m,s},
+\end{align}
+
+with $\text{Var}(u_s)=\varsigma^2$, $\text{Var}(\nu_m)=\eta^2$, $\text{Var}(\omega_0)=w^2$, $\text{Var}(\epsilon_{o,m,s})=\sigma^2$ and $\text{Cov}(\epsilon_{o,m,s},\epsilon_{o',m',s})=\rho\sigma^2$.     

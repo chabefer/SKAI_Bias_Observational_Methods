@@ -1,5 +1,3 @@
-
-
 This is a [SKAI](https://chabefer.github.io/SKY/index.html) website examining the bias of [Observational Methods of causal inference](https://chabefer.github.io/STCI/OM.html) using Randomized Controlled Trials with Imperfect Compliance.
 
 This website contains:

@@ -369,6 +369,14 @@ $(document).ready(function () {
 </div>
 </div>
 </div>
+<div id="summarizing-the-results" class="section level2">
+<h2>Summarizing the results</h2>
+<p>Our approach yields one estimate of the bias of observational methods <span class="math inline">\(\hat{B}^{NE}_{o,m,s}\)</span> by estimator <span class="math inline">\(NE\)</span> (<span class="math inline">\(WW\)</span>, <span class="math inline">\(P2SL\)</span> or <span class="math inline">\(PLR\)</span>), outcome <span class="math inline">\(o\)</span>, manipulation <span class="math inline">\(m\)</span> (there might be several manipulations by experiment) and study <span class="math inline">\(s\)</span>. We analyze our results using a <a href="https://chabefer.github.io/STCI/meta.html#meta-regression">meta-analytic regression</a>, and in particular the <strong>Correlated Hierarchical model with Robust Variance Estimation</strong> of <a href="https://doi.org/10.1007/s11121-021-01246-3">Pustejovsky and Tipton (2022)</a>. In practice, we model each bias estimate as follows:</p>
+<p><span class="math display">\[\begin{align}
+  \hat{B}^{NE}_{o,m,s} &amp; = \mathbf{X}_{s} \mathbf{\beta}  + u_s + \nu_m + \omega_o +\epsilon_{o,m,s},
+\end{align}\]</span></p>
+<p>with <span class="math inline">\(\text{Var}(u_s)=\varsigma^2\)</span>, <span class="math inline">\(\text{Var}(\nu_m)=\eta^2\)</span>, <span class="math inline">\(\text{Var}(\omega_0)=w^2\)</span>, <span class="math inline">\(\text{Var}(\epsilon_{o,m,s})=\sigma^2\)</span> and <span class="math inline">\(\text{Cov}(\epsilon_{o,m,s},\epsilon_{o&#39;,m&#39;,s})=\rho\sigma^2\)</span>.</p>
+</div>
 </div>
 
 

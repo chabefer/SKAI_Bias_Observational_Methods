@@ -11,7 +11,7 @@
 
 
 
-<title>Data used to estimate the bias of Observational Methods</title>
+<title>Data sources</title>
 
 <script src="site_libs/header-attrs-2.14/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
@@ -275,12 +275,73 @@ $(document).ready(function () {
 
 
 
-<h1 class="title toc-ignore">Data used to estimate the bias of Observational Methods</h1>
+<h1 class="title toc-ignore">Data sources</h1>
 
 </div>
 
 
-
+<p>We use imperfect compliance RCTs for this project. An imperfect compliance RCT is an RCT where the randomised manipulation does not perfectly determine program take-up, for instance, if take-up depends on a choice by the participant(s). In other words, if there is a correlation of less than 1 between assignment to treatment and take-up of treatment then there is imperfect compliance. We make a distinction between three types of imperfect compliance RCT:</p>
+<ol style="list-style-type: decimal">
+<li><a href="https://chabefer.github.io/STCI/RCT.html#sec:design3">Eligibility Designs</a>: RCTs in which there is imperfect compliance in the manipulated group only. No-one takes up the program in the non-manipulated group and only some of the members of the manipulated group take up the program.</li>
+<li>Reverse Eligibility designs (these are rare): RCTs in which there is imperfect compliance in the non-manipulated group only. Everyone takes up the program in the manipulated group, but some of the members of the non-manipulated group also take up the program.</li>
+<li><a href="https://chabefer.github.io/STCI/RCT.html#sec:design4">Encouragement Designs</a>: RCTs in which there is imperfect compliance both in the manipulated and the non-manipulated groups. There is a positive but not 100% take up of the program in both groups and usually greater take-up in the manipulated group. Designs are only feasible encouragement designs if take-up of the program can be observed in both the manipulated and the non-manipulated group.</li>
+</ol>
+<p>A study is included in our analysis if all of the following are present:</p>
+<ol style="list-style-type: decimal">
+<li>Variable(s) measuring the experimental manipulation(s) (e.g. eligibility/encouragement for a program). Usually these will be binary, if not we have to transform them into a binary variable.</li>
+<li>Variable(s) measuring take-up of a program of interest. Usually these will be binary, if not we have to transform them into a binary variable.</li>
+<li>At least one outcome variable that we believe is influenced by the program.</li>
+<li>Imperfect compliance with the experimental manipulation in program take-up.</li>
+</ol>
+<div id="search-for-imperfect-compliance-rcts" class="section level1">
+<h1>Search for Imperfect Compliance RCTs</h1>
+<p>Our search domain was all of the datasets from the J-PAL and IPA Dataverses. Our final search of the two Dataverses was on 3rd August 2022, at which point there were 207 datasets available.</p>
+<p>We used the J-PAL and IPA Dataverses for a number of reasons. Firstly, these are the two most prominent organisations that run randomised controlled trials in development economics. Secondly, these repositories had a large number of studies available on them so we expected to find many suitable datasets for our project.</p>
+<p>We webscraped the meta-data from all 207 of the studies on both Dataverses. This includes author names, paper title, year of publication, DOI where available, and so on. After we scrape the meta-data, each study goes through a three-step screening process from the initial scrape to being included in our study.</p>
+<ol style="list-style-type: decimal">
+<li><strong>Pre-screening:</strong> at <em>Level 1</em>, for each repository, we pre-screen all projects to eliminate those datasets that are definitely not suitable for our analysis – often non RCT data or RCTs with full compliance.</li>
+<li><strong>Screening:</strong> at <em>Level 2</em>, we perform an in-depth screening of the projects that could proceed from <em>Level 1</em> to <em>Level 2</em>. The objective of this step is to get an understanding of the information potentially available in the dataset to a) once again eliminate papers that are not deemed suitable after further scrutinizing (this could for example happen if the authors do not collect a measure of imperfect compliance) or b) to obtain a set of basic information about the paper such as the available outcome measures, the randomization and participation variables and other metadata relevant for <em>Level 3</em>.</li>
+<li><strong>Data preparation:</strong> the papers that pass <em>Level 2</em>, move on to <em>Level 3</em>. We now collect information from the dataset itself to prepare the econometric analysis. The goal of this stage is to prepare a clean dataset for each project where outcome, treatment, treatment uptake and control variables are stored. This step involves <em>data cleaning</em>. Eventually, each project dataset stores the relevant variables in a harmonized way with one row for each specification ready to be read by our bias estimation code package.</li>
+</ol>
+<p>Of the 207 JPAL and IPA datasets we screened:</p>
+<ul>
+<li>123 passed level 1 screening,</li>
+<li>85 of them passed level 2 screening,</li>
+<li>40 of them passed level 3 screening and are included in our analysis.</li>
+</ul>
+</div>
+<div id="description-of-the-final-dataset" class="section level1">
+<h1>Description of the final dataset</h1>
+<p>Let us first describe the datasets that we have included in our analysis, focusing on country, sector/topic, journal and authors.</p>
+<div class="figure" style="text-align: center">
+<img src="figures/country.png" alt="Countries represented in the analysis" width="45%" />
+<p class="caption">
+Countries represented in the analysis
+</p>
+</div>
+<p>Our studies come almost entirely from developing countries, as this is where J-PAL and IPA mostly operate. We have studies from Africa, South America, and Asia, as well as North America (USA) and Europe (France). Studies from countries with IPA or J-PAL hubs are strongly represented in our dataset, similarly to the development economics literature more broadly. Kenya appears the most in our analysis, with India, the Philippines, Uganda and Mexico also being highly represented.</p>
+<div class="figure" style="text-align: center">
+<img src="figures/main_sector.png" alt="Sectors represented in the analysis" width="45%" />
+<p class="caption">
+Sectors represented in the analysis
+</p>
+</div>
+<p>The most represented sectors are finance, education and health, all common areas of study within development economics. Note that we only have one study in each of environment and firms, so when we look at heterogeneity according to these sectors later, we should not expect the results to be particularly generalisable, whereas we can be more confident in the sectors with more results.</p>
+<div class="figure" style="text-align: center">
+<img src="figures/journal.png" alt="Journals represented in the analysis" width="45%" />
+<p class="caption">
+Journals represented in the analysis
+</p>
+</div>
+<p>The studies in our analysis also represent those published in top journals. We have nine papers from top-five journals in economics: four papers from The Quarterly Journal of Economics, three from the American Economics Review, and one each from Econometrica and the Journal of Political Economy. Eight of our studies come from the American Economic Journal: Applied Economics. This journal publishes many randomised controlled trials and enforces its data availability policy which means it is the most strongly represented journal in our study. We also have a few studies published in non-economics journals, signifiying our breadth of coverage: American Political Science Review, the Journal of Politics, PLoS One, PNAS and Science. We do not cover many development field journals, only having two studies from the Journal of Development Economics.</p>
+<div class="figure" style="text-align: center">
+<img src="figures/author.png" alt="Authors represented in the analysis" width="45%" />
+<p class="caption">
+Authors represented in the analysis
+</p>
+</div>
+<p>We show authors which appear at least twice in our dataset. Almost all of these authors are prominent development economists, with Dean Karlan, Pascaline Dupas and Esther Duflo all appearing most frequently, with at least seven papers each. This suggests that even though not many of our studies are published in development field journals, they are still likely to be representative of the development economics literature more broadly.</p>
+</div>
 
 
 
