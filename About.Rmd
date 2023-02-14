@@ -4,3 +4,8 @@ output: html_document
 ---
 
 This website is a part of [SKAI](https://chabefer.github.io/SKY/index.html), the Social Science Knowledge Accumulation Initiative. 
+The research reported on this website has received funding from the [Centre of Excellence for Development Impact and Learning](https://cedilprogramme.org/), [Innovations for Poverty Action](https://www.poverty-action.org/) and the [The Abdul Latif Jameel Poverty Action Lab](The Abdul Latif Jameel Poverty Action Lab).
+
+The code for this website can be found on [GitHub](https://github.com/chabefer/SKAI_Bias_Observational_Methods).
+The way to make contributions to this website and to access the data behind it are described [here](https://chabefer.github.io/SKY/tutoSKY.html).
+You can also make comments and suggestions on the website [here](https://github.com/chabefer/SKAI_Bias_Observational_Methods/discussions).
